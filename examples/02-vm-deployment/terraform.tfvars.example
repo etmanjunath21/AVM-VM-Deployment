@@ -1,0 +1,30 @@
+# Copy this file to terraform.tfvars and update with your values
+
+resource_group_name = "rg-avm-lab-001"
+key_vault_name      = "kv-avm-lab-001"
+vnet_name          = "vnet-avm-lab-001"
+subnet_name        = "snet-vm-001"
+
+vm_name        = "vm-avm-lab-001"
+admin_username = "azureuser"
+
+# Optional: Customize these values
+# vm_size                        = "Standard_B2s"
+# vm_zone                        = "1"
+# os_disk_caching               = "ReadWrite"
+# os_disk_storage_account_type  = "Premium_LRS"
+# os_disk_size_gb               = 128
+
+# For Windows Server 2019
+# source_image_reference = {
+#   publisher = "MicrosoftWindowsServer"
+#   offer     = "WindowsServer"
+#   sku       = "2019-Datacenter"
+#   version   = "latest"
+# }
+
+tags = {
+  Environment = "lab"
+  Project     = "avm-vm-deployment"
+  Owner       = "your-name"
+}

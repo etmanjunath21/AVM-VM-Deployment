@@ -1,15 +1,18 @@
-# Copy this file to terraform.tfvars and update with your values
-
-resource_group_name = "rg-avm-lab-001"
-key_vault_name      = "kv-avm-lab-001"
+# Basic Configuration - CHANGE THESE VALUES
+resource_group_name = "rg-avm-lab-001"          # Your existing resource group
+key_vault_name      = "kv-avm-lab-12345"        # Must be globally unique
 vnet_name          = "vnet-avm-lab-001"
 subnet_name        = "snet-vm-001"
 
-# Optional: Customize these values
-# vnet_address_space       = ["10.0.0.0/16"]
-# subnet_address_prefixes  = ["10.0.1.0/24"]
-# allowed_ip_range         = "YOUR_PUBLIC_IP/32"  # Replace with your public IP
+# Network Configuration (Limited for Testing)
+vnet_address_space       = ["10.10.0.0/24"]    # 256 IPs total
+subnet_address_prefixes  = ["10.10.0.0/28"]    # 16 IPs for VMs
 
+# Security Configuration - IMPORTANT: CHANGE THIS
+allowed_ip_range = "0.0.0.0/0"  # CHANGE TO YOUR PUBLIC IP!
+# Example: allowed_ip_range = "203.0.113.45/32"
+
+# Tags
 tags = {
   Environment = "lab"
   Project     = "avm-vm-deployment"

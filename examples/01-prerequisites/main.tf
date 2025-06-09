@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+      version = ">= 3.116.0, < 4.0.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -38,7 +38,7 @@ resource "random_password" "vm_admin_password" {
 # Deploy Key Vault using Microsoft AVM module
 module "key_vault" {
   source = "Azure/avm-res-keyvault-vault/azurerm"
-  version = "~> 0.5"
+  version = "~> 0.9"
 
   name                = var.key_vault_name
   location            = data.azurerm_resource_group.main.location
@@ -77,7 +77,7 @@ module "key_vault" {
 # Deploy Virtual Network using Microsoft AVM module
 module "virtual_network" {
   source = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "~> 0.1"
+  version = "~> 0.7"
 
   name                = var.vnet_name
   location            = data.azurerm_resource_group.main.location
@@ -97,7 +97,7 @@ module "virtual_network" {
 # Deploy Network Security Group using Microsoft AVM module
 module "network_security_group" {
   source = "Azure/avm-res-network-networksecuritygroup/azurerm"
-  version = "~> 0.2"
+  version = "~> 0.3"
 
   name                = "${var.subnet_name}-nsg"
   location            = data.azurerm_resource_group.main.location
@@ -107,24 +107,38 @@ module "network_security_group" {
     allow_rdp = {
       access                     = "Allow"
       direction                  = "Inbound"
-      name                       = "Allow-RDP"
+      name                       = "Allow-RDP-Restricted"
       priority                   = 1001
       protocol                   = "Tcp"
       source_address_prefix      = var.allowed_ip_range
       source_port_range          = "*"
-      destination_address_prefix = "*"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "3389"
+      description               = "Allow RDP from specified IP range only"
     }
     allow_winrm = {
       access                     = "Allow"
       direction                  = "Inbound"
-      name                       = "Allow-WinRM"
+      name                       = "Allow-WinRM-Restricted"
       priority                   = 1002
       protocol                   = "Tcp"
       source_address_prefix      = var.allowed_ip_range
       source_port_range          = "*"
-      destination_address_prefix = "*"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "5985"
+      description               = "Allow WinRM from specified IP range only"
+    }
+    deny_all_inbound = {
+      access                     = "Deny"
+      direction                  = "Inbound"
+      name                       = "Deny-All-Other-Inbound"
+      priority                   = 4000
+      protocol                   = "*"
+      source_address_prefix      = "*"
+      source_port_range          = "*"
+      destination_address_prefix = "*"
+      destination_port_range     = "*"
+      description               = "Deny all other inbound traffic"
     }
   }
 
@@ -136,3 +150,4 @@ resource "azurerm_subnet_network_security_group_association" "vm_subnet_nsg" {
   subnet_id                 = module.virtual_network.subnets["vm_subnet"].resource_id
   network_security_group_id = module.network_security_group.resource_id
 }
+

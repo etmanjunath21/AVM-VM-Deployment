@@ -1,3 +1,4 @@
+# Resource Group Outputs
 output "resource_group_name" {
   description = "Name of the resource group"
   value       = data.azurerm_resource_group.main.name
@@ -8,6 +9,7 @@ output "resource_group_location" {
   value       = data.azurerm_resource_group.main.location
 }
 
+# Key Vault Outputs
 output "key_vault_id" {
   description = "ID of the Key Vault"
   value       = module.key_vault.resource_id
@@ -15,22 +17,23 @@ output "key_vault_id" {
 
 output "key_vault_name" {
   description = "Name of the Key Vault"
-  value       = module.key_vault.resource.name
+  value       = module.key_vault.name
 }
 
-output "key_vault_location" {
-  description = "Location of the Key Vault"
-  value       = module.key_vault.resource.location
+output "key_vault_uri" {
+  description = "URI of the Key Vault"
+  value       = module.key_vault.uri
 }
 
-output "vnet_id" {
+# Virtual Network Outputs
+output "virtual_network_id" {
   description = "ID of the Virtual Network"
   value       = module.virtual_network.resource_id
 }
 
-output "vnet_name" {
+output "virtual_network_name" {
   description = "Name of the Virtual Network"
-  value       = module.virtual_network.resource.name
+  value       = module.virtual_network.name
 }
 
 output "subnet_id" {
@@ -40,10 +43,16 @@ output "subnet_id" {
 
 output "subnet_name" {
   description = "Name of the VM subnet"
-  value       = module.virtual_network.subnets["vm_subnet"].name
+  value       = var.subnet_name
 }
 
-output "vm_admin_password_secret_name" {
-  description = "Name of the secret containing VM admin password"
-  value       = "vm-admin-password"
+# Network Security Group Outputs
+output "network_security_group_id" {
+  description = "ID of the Network Security Group"
+  value       = module.network_security_group.resource_id
+}
+
+output "network_security_group_name" {
+  description = "Name of the Network Security Group"
+  value       = module.network_security_group.name
 }

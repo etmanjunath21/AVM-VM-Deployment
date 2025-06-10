@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.116.0, < 4.0.0"
+      version = ">= 3.116.0, < 5.0.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -19,6 +19,7 @@ provider "azurerm" {
       recover_soft_deleted_key_vaults = true
     }
   }
+  subscription_id = "4a6dcc70-ea34-4df6-8472-233d5b531918"
 }
 
 # Data source for current client configuration
